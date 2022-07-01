@@ -2,9 +2,67 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script type="text/javascript">
+      function myfunction() {
+        alert("how are you");
+      }
+    </script>
+
+    <style>
+      .submit-button {
+        width: 80%;
+        background-color: #0163d2;
+        color: white;
+        border: none;
+        height: 34px;
+        cursor: pointer;
+      }
+      .modal-content {
+        padding: 10px !important;
+      }
+
+      .getin-text {
+        font-size: 16 !important;
+        font-weight: 600;
+        margin-top: 0 !important;
+        padding-bottom: 0;
+      }
+      .mod {
+        display: flex;
+        flex-direction: row;
+        max-width: 400px !important;
+      }
+      .modalselect {
+        width: 200px;
+        margin: 0;
+        border: 1px solid #767676;
+        min-height: 33.13px;
+      }
+      .modal {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .modheader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .modaldiv {
+        display: flex;
+        flex-direction: column;
+
+        margin: 10px;
+      }
+      .modalinput {
+        width: 250px;
+        font-size: 12px;
+        height: 33.13px;
+      }
+    </style>
   </head>
   <body>
     <div
@@ -17,8 +75,85 @@
         flex-direction: column;
       "
     >
-      <h2>Nothing to show</h2>
-      <h5>Very Soon this page will be updated!!</h5>
+      <h4
+        style="
+          font-size: 32px;
+          font-weight: 600;
+          margin: 0px;
+          padding-bottom: 20px;
+        "
+      >
+        Request a book!!
+      </h4>
+      <form method="post" name="myemailform" id="myemailform">
+        <div class="modaldiv">
+          <div style="margin-bottom: 8px">Email:</div>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="modalinput"
+            required
+          />
+        </div>
+
+        <div class="modaldiv">
+          <div style="margin-bottom: 8px">Book:</div>
+          <textarea style="width: 250px" id="book" required></textarea>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+          "
+        >
+          <input
+            class="submit-button"
+            id="submit-button"
+            type="submit"
+            value="Send Form"
+          />
+
+          <div class="submit-loader">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+          </div>
+        </div>
+      </form>
     </div>
+    <script type="text/javascript">
+      $("#myemailform").on("submit", function (event) {
+        alert(1);
+        event.preventDefault();
+        var email = $("#email").val();
+        var book = $("#book").val();
+        fetch("https://bookstore-app-api.herokuapp.com/send-response", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            book: book,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status == "ok") {
+              alert(
+                "Thanks for giving your response. We will process your reques!!!"
+              );
+            } else {
+              alert("Something went wrong. Try again later!!! ");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert(error);
+          });
+      });
+    </script>
   </body>
 </html>
